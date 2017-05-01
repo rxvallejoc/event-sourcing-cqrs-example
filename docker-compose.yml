@@ -1,0 +1,83 @@
+version: '2'
+services:
+  rabbitmq:
+    image: rabbitmq:3.6.9-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=Administrator
+      - RABBITMQ_DEFAULT_PASS=password
+  customer-db:
+    image: mysql:5.6
+    container_name: customer-db
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=customer
+      - MYSQL_USER=customer
+      - MYSQL_PASSWORD=password
+  menu-db:
+    image: mysql:5.6
+    container_name: menu-db
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=menu
+      - MYSQL_USER=menu
+      - MYSQL_PASSWORD=password
+  order-db:
+    image: mysql:5.6
+    container_name: order-db
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=order
+      - MYSQL_USER=order
+      - MYSQL_PASSWORD=password
+  customer-service:
+    container_name: customer-service
+    build:
+      context: ./customer/
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    links:
+      - customer-db
+      - rabbitmq
+  menu-service:
+    container_name: menu-service
+    build:
+      context: ./menu/
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+    links:
+      - menu-db
+      - rabbitmq
+  order-service:
+    container_name: order-service
+    build:
+      context: ./order/
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    links:
+      - order-db
+      - rabbitmq
+  haproxy:
+    image: haproxy:1.7-alpine
+    container_name: haproxy
+    ports:
+      - "15000:15000"
+      - "9090:9090"
+    links:
+      - customer-service
+      - menu-service
+      - order-service
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy/

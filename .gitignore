@@ -1,0 +1,12 @@
+.DS_Store
+.gradle
+.gradletasknamecache
+*/*.iml
+*/*.ipr
+*/*.iws
+*/out
+*/build
+*/.idea
+*/.DS_Store
+*/.gradle
+*/.gradletasknamecache

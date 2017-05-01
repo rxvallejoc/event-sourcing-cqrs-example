@@ -1,0 +1,34 @@
+spring:
+  data:
+    rest:
+      basePath: /menu
+  rabbitmq:
+    host: rabbitmq
+    username: Administrator
+    password: password
+  datasource:
+    url: jdbc:mysql://menu-db:3306/menu
+    username: menu
+    password: password
+    test-on-borrow: true
+    test-while-idle: true
+    validation-query: select 1;
+    maxActive: 50
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        ddl-auto: update
+        id:
+          new_generator_mappings: false
+
+axon:
+  amqp:
+    exchange: MenuEvents
+  eventhandling:
+    processors:
+      amqpEvents:
+        source: menuMessageSource
