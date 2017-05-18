@@ -1,7 +1,7 @@
 package com.thoughtworks.customers.command.api;
 
 import com.thoughtworks.customers.command.AddAddressCommand;
-import com.thoughtworks.customers.command.Address;
+import com.thoughtworks.customers.query.Address;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.axonframework.commandhandling.callbacks.FutureCallback;
